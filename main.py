@@ -7,15 +7,25 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 import time
+import webbrowser
+chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+
+
+############# 자동 예매 원하는 설정으로 변경 ##############
 
 member_number = "2292252244" # 회원번호
 password= "hy0131@@" # 비밀번호
 arrival = "수서" # 출발지
 departure = "동대구" # 도착지
 standard_date = "20230217" # 기준날짜 ex) 20221101
-standard_time = "14" # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
+standard_time = "16" # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
 number_of_trains = 11 # 상단에서부터 조회할 기차수  maximum = 11
-count = 0 # 새로고침 카운트
+
+#################################################################
+
+
+# v 1.0
+
 reserved = False
 
 print("--------------- Start SRT Macro ---------------")
@@ -78,6 +88,7 @@ print(train_list)
 
 
 while True: 
+
     for i in range(1,number_of_trains):
         standard_seat = driver.find_element(By.CSS_SELECTOR, f"#result-form > fieldset > div.tbl_wrap.th_thead > table > tbody > tr:nth-child({i}) > td:nth-child(7)").text
 
@@ -90,6 +101,7 @@ while True:
             if driver.find_elements(By.ID, 'isFalseGotoMain'):
                 reserved = True
                 print('예약 성공')
+                webbrowser.get(chrome_path).open("https://etk.srail.kr/hpg/hra/02/selectReservationList.do?pageId=TK0102010000")
                 break
 
             else:
@@ -99,12 +111,11 @@ while True:
     
     if not reserved:
         # 5초 기다리기
-        # time.sleep(1)
-        count += 1
+
         # 다시 조회하기
         submit = driver.find_element(By.XPATH, "/html/body/div/div[4]/div/div[2]/form/fieldset/div[2]/input")
         driver.execute_script("arguments[0].click();", submit)
-        print(f"새로고침 {count}")
+        print("새로고침")
 
         driver.implicitly_wait(10)
         time.sleep(1)
