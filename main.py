@@ -13,8 +13,8 @@ chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
 ############# 자동 예매 원하는 설정으로 변경 ##############
 
-member_number = "2292252244" # 회원번호
-password= "hy0131@@" # 비밀번호
+member_number = "0000000000" # 회원번호
+password= "password" # 비밀번호
 arrival = "수서" # 출발지
 departure = "동대구" # 도착지
 standard_date = "20230217" # 기준날짜 ex) 20221101
