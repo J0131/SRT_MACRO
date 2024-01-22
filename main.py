@@ -118,7 +118,7 @@ while True:
         print("새로고침")
 
         driver.implicitly_wait(10)
-        time.sleep(1)
+        time.sleep(2)
 
     else:
         break

@@ -3,6 +3,7 @@
 
 1. https://kminito.tistory.com/78 
 위 블로그의 설명에 따라 chromedriver.exe 파일을 다운받고 main.py 파일과 동일한 디렉토리에 넣어준다.
+(chromedriver는 반드시 본인 브라우저에 맞는 버전을 사용해야합니다.)
 
 2. main.py를 파이썬 IDE를 이용하여 실행시켜준다.
 
