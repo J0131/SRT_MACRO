@@ -1,6 +1,7 @@
 # 프로젝트 : SRT_MACRO
 # 작성자 : 최범준
 # 작성일시 : 2023-02-13
+# 수정일시 : 2024-02-24
 
 from random import randint
 from selenium import webdriver
@@ -17,14 +18,11 @@ member_number = "0000000000" # 회원번호
 password= "password" # 비밀번호
 arrival = "수서" # 출발지
 departure = "동대구" # 도착지
-standard_date = "20230217" # 기준날짜 ex) 20221101
-standard_time = "16" # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
+standard_date = "20240223" # 기준날짜 ex) 20221101
+standard_time = "18" # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
 number_of_trains = 11 # 상단에서부터 조회할 기차수  maximum = 11
 
 #################################################################
-
-
-# v 1.0
 
 reserved = False
 
@@ -89,38 +87,53 @@ print(train_list)
 
 while True: 
 
-    for i in range(1,number_of_trains):
-        standard_seat = driver.find_element(By.CSS_SELECTOR, f"#result-form > fieldset > div.tbl_wrap.th_thead > table > tbody > tr:nth-child({i}) > td:nth-child(7)").text
+    try:
+        for i in range(1,number_of_trains):
+            standard_seat = driver.find_element(By.CSS_SELECTOR, f"#result-form > fieldset > div.tbl_wrap.th_thead > table > tbody > tr:nth-child({i}) > td:nth-child(7)").text
 
-        if "예약하기" in standard_seat:
-            print("예약 가능 클릭")
-            driver.find_element(By.XPATH, f"/html/body/div[1]/div[4]/div/div[3]/div[1]/\
-            form/fieldset/div[6]/table/tbody/tr[{i}]/td[7]/a/span").click()
-            driver.implicitly_wait(3)
+            if "예약하기" in standard_seat:
+                print("예약 가능 클릭")
+                driver.find_element(By.XPATH, f"/html/body/div[1]/div[4]/div/div[3]/div[1]/\
+                form/fieldset/div[6]/table/tbody/tr[{i}]/td[7]/a/span").click()
+                driver.implicitly_wait(3)
 
-            if driver.find_elements(By.ID, 'isFalseGotoMain'):
-                reserved = True
-                print('예약 성공')
-                webbrowser.get(chrome_path).open("https://etk.srail.kr/hpg/hra/02/selectReservationList.do?pageId=TK0102010000")
-                break
+                if driver.find_elements(By.ID, 'isFalseGotoMain'):
+                    reserved = True
+                    print('예약 성공')
+                    webbrowser.get(chrome_path).open("https://etk.srail.kr/hpg/hra/02/selectReservationList.do?pageId=TK0102010000")
+                    break
 
-            else:
-                print("잔여석 없음. 다시 검색")
-                driver.back() #뒤로가기
-                driver.implicitly_wait(5)
+                else:
+                    print("잔여석 없음. 다시 검색")
+                    driver.back() #뒤로가기
+                    driver.implicitly_wait(5)
+
+    except: 
+        print('잔여석 조회 불가')
+        pass
     
     if not reserved:
-        # 5초 기다리기
-
+        try:
         # 다시 조회하기
-        submit = driver.find_element(By.XPATH, "/html/body/div/div[4]/div/div[2]/form/fieldset/div[2]/input")
-        driver.execute_script("arguments[0].click();", submit)
-        print("새로고침")
+            submit = driver.find_element(By.XPATH, "/html/body/div/div[4]/div/div[2]/form/fieldset/div[2]/input")
+            driver.execute_script("arguments[0].click();", submit)
+            print("새로고침")
 
+        except: 
+            print("잔여석 없음 #2. 초기화")
+            driver.back() #뒤로가기
+            driver.implicitly_wait(5)
+
+            driver.refresh() #새로고침
+            driver.implicitly_wait(5)
+            pass
+
+        # 2초 대기
         driver.implicitly_wait(10)
         time.sleep(2)
 
     else:
+        time.sleep(1000)
         break
 
 
