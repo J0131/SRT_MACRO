@@ -1,16 +1,16 @@
-# 프로젝트 : SRT_MACRO
-# 작성자 : 최범준
-# 작성일시 : 2023-02-13
-# 수정일시 : 2024-02-24
+# edit date : 2024-03-05
+# version : 1.9.0
 
 from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from modules.selenium import *
+
 import time
 import webbrowser
-chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
+chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
 ############# 자동 예매 원하는 설정으로 변경 ##############
 
@@ -18,7 +18,7 @@ member_number = "0000000000" # 회원번호
 password= "password" # 비밀번호
 arrival = "수서" # 출발지
 departure = "동대구" # 도착지
-standard_date = "20240223" # 기준날짜 ex) 20221101
+standard_date = "20240306" # 기준날짜 ex) 20221101
 standard_time = "18" # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
 number_of_trains = 11 # 상단에서부터 조회할 기차수  maximum = 11
 
@@ -30,7 +30,11 @@ print("--------------- Start SRT Macro ---------------")
 
 # webdriver 파일의 경로 입력
 # 같은 디렉토리에 있기 때문에 chromedriver.exe파일 이름만 써줌
-driver = webdriver.Chrome("chromedriver")
+print("selenium version : ", get_selenium_version())
+
+# selenium 버전에 따른 webdriver 분기
+v1, v2, v3 = get_selenium_version().split(".")
+driver = webdriver.Chrome("chromedriver") if int(v1) < 4 else webdriver.Chrome()
 
 # 이동을 원하는 페이지 주소 입력
 driver.get('https://etk.srail.co.kr/cmc/01/selectLoginForm.do')
@@ -47,7 +51,6 @@ driver.find_element(By.ID, 'hmpgPwdCphd01').send_keys(password)
 driver.find_element(By.XPATH, '/html/body/div/div[4]/div/div[2]/form/\
     fieldset/div[1]/div[1]/div[2]/div/div[2]/input').click()
 driver.implicitly_wait(5)
-
 
 driver.get('https://etk.srail.kr/hpg/hra/01/selectScheduleList.do')
 driver.implicitly_wait(5)
