@@ -1,7 +1,15 @@
 # edit date : 2024-03-05
 # version : 1.9.0
 
-from random import randint
+import os
+import sys
+from dotenv import load_dotenv
+
+try:
+    load_dotenv(sys.argv[1])
+except:
+    load_dotenv()
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
@@ -12,15 +20,17 @@ import webbrowser
 
 chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
-############# 자동 예매 원하는 설정으로 변경 ##############
+#### .env에 정의해서 사용
 
-member_number = "0000000000" # 회원번호
-password= "password" # 비밀번호
-arrival = "수서" # 출발지
-departure = "동대구" # 도착지
-standard_date = "20240306" # 기준날짜 ex) 20221101
-standard_time = "18" # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
-number_of_trains = 11 # 상단에서부터 조회할 기차수  maximum = 11
+member_number = os.getenv("MEMBER_NUMBER", "") # 회원번호
+password= os.getenv("MEMBER_PASSWORD", "") # 비밀번호
+arrival = os.getenv("ARRIVAL_NAME", "") # 출발지 ex) 수서
+departure = os.getenv("DEPARTURE_NAME", "") # 도착지 ex) 천안아산
+standard_date = os.getenv("STANDARD_DATE", "") # 기준날짜 ex) 20221101
+standard_time = os.getenv("STANDARD_TIME", "") # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
+start_of_train = os.getenv("START_OF_TRAIN", "") # 시작하는 기차 ex) 1
+number_of_train = os.getenv("NUMBER_OF_TRAIN", "") # 상단에서부터 조회할 기차수 ex) 2
+
 
 #################################################################
 
@@ -91,7 +101,7 @@ print(train_list)
 while True: 
 
     try:
-        for i in range(1,number_of_trains):
+        for i in range(start_of_train, start_of_train + number_of_train):
             standard_seat = driver.find_element(By.CSS_SELECTOR, f"#result-form > fieldset > div.tbl_wrap.th_thead > table > tbody > tr:nth-child({i}) > td:nth-child(7)").text
 
             if "예약하기" in standard_seat:
@@ -104,6 +114,7 @@ while True:
                     reserved = True
                     print('예약 성공')
                     webbrowser.get(chrome_path).open("https://etk.srail.kr/hpg/hra/02/selectReservationList.do?pageId=TK0102010000")
+                    os.system(f"terminal-notifier -title '{departure} -> {arrival} {standard_date} {standard_time}' -message 'SRT 예약 완료' -sound default")
                     break
 
                 else:
