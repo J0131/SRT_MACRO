@@ -1,3 +1,5 @@
 .env
 .env.home
 .env.company
+
+modules/

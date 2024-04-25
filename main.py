@@ -28,8 +28,8 @@ arrival = os.getenv("ARRIVAL_NAME", "") # 출발지 ex) 수서
 departure = os.getenv("DEPARTURE_NAME", "") # 도착지 ex) 천안아산
 standard_date = os.getenv("STANDARD_DATE", "") # 기준날짜 ex) 20221101
 standard_time = os.getenv("STANDARD_TIME", "") # 기준 시간 ex) 00 - 22 // 2의 배수로 입력
-start_of_train = os.getenv("START_OF_TRAIN", "") # 시작하는 기차 ex) 1
-number_of_train = os.getenv("NUMBER_OF_TRAIN", "") # 상단에서부터 조회할 기차수 ex) 2
+start_of_train = int(os.getenv("START_OF_TRAIN", "")) # 시작하는 기차 ex) 1
+number_of_train = int(os.getenv("NUMBER_OF_TRAIN", "")) # 상단에서부터 조회할 기차수 ex) 2
 
 
 #################################################################
