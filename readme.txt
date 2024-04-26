@@ -18,6 +18,7 @@ arrival : 출발지
 departure : 도착지
 standard_date : 기준날짜 ex) 20221101, 20230102 
 standard_time : 기준시간 ex) 00 - 22 // 2의 배수로 입력해야됨
-number_of_trains : 상단에서부터 조회할 기차수  //  범위: 2 ~ 11
+from_train_number : 화면에 보여지는 몇번째 기차부터 조회할지  min = 1, max = 10
+to_train_number : 화면에 보여지는 몇번째 기차까지 조회할지 min = from_train_number, max = 10
 
 
